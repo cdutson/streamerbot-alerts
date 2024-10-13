@@ -1,0 +1,125 @@
+:root {
+  --primary-text-color: #ffffff;
+  --defaultTitleColor: #00eeae; /* 00eeae */
+  --text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.85), 0px 0px 4px rgba(0, 0, 0, 0.7);
+  --font: "Montserrat-optimized", Monserrat, Verdana, sans-serif;
+  --animate-in-speed: 2s;
+  --animate-out-speed: 2s;
+  --img-animate-in-speed: 2.5s;
+  --img-animate-out-speed: 2.5s;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--primary-text-color);
+}
+
+/* https://codepen.io/nelledejones/pen/gOOPWrK css trnasitions */
+.bounce-in {
+  -webkit-font-smoothing: subpixel-antialiased;
+  animation: bounce-in var(--animate-in-speed) ease normal;
+  transform: perspective(1px) translateZ(0) scale(1);
+  transform-origin: 50% 0%;
+}
+.bounce-in-img {
+  animation: bounce-in-img var(--img-animate-in-speed) ease normal;
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: perspective(1px) translateZ(0) scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: perspective(1px) translateZ(0) scale(1.048);
+  }
+  70% {
+    transform: perspective(1px) translateZ(0) scale(0.9);
+  }
+  100% {
+    transform: perspective(1px) translateZ(0) scale(1);
+  }
+}
+
+/* Duplicate is because of javascript silliness */
+@keyframes bounce-in-img {
+  0% {
+    opacity: 0;
+    transform: perspective(1px) translateZ(0) scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: perspective(1px) translateZ(0) scale(1.048);
+  }
+  70% {
+    transform: perspective(1px) translateZ(0) scale(0.9);
+  }
+  100% {
+    transform: perspective(1px) translateZ(0) scale(1);
+  }
+}
+
+.bounce-out {
+  -webkit-font-smoothing: subpixel-antialiased;
+  animation: bounce-out var(--animate-out-speed) ease normal;
+  transform: perspective(1px) translateZ(0) scale(1);
+  transform-origin: 50% 0%;
+}
+
+@keyframes bounce-out {
+  0% {
+    transform: perspective(1px) translateZ(0) scale(1);
+  }
+  25% {
+    transform: perspective(1px) translateZ(0) scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: perspective(1px) translateZ(0) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: perspective(1px) translateZ(0) scale(0.3);
+  }
+}
+
+#alertContainer {
+  display: flex;
+  flex-direction: row;
+  max-width: 1000px;
+  margin: 100px 0px 00px 60px;
+  align-content: center;
+  align-items: center;
+}
+
+#alertImageWrapper {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+#alertImage {
+  max-height: 200px;
+  max-width: 200px;
+}
+
+#title {
+  margin: 0 0 8px 0;
+  text-shadow: var(--text-shadow);
+  font-size: 36px;
+  color: var(--defaultTitleColor);
+}
+#message {
+  margin: 0;
+  font-size: 16px;
+  text-shadow: var(--text-shadow);
+}
+
+.hidden {
+  opacity: 0;
+}

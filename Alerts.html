@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="CSS/alerts.css" />
+    <script src="https://unpkg.com/@streamerbot/client/dist/streamerbot-client.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/main.js"></script>
+    <title>Streamer.bot websocket alerts</title>
+  </head>
+  <body>
+    <div id="alertContainer">
+      <div id="alertImageWrapper">
+        <img src="" id="alertImage" />
+      </div>
+      <div id="details">
+        <h1 id="title"></h1>
+        <h2 id="message"></h2>
+      </div>
+      <audio id="sound"></audio>
+    </div>
+    <script>
+      attachListeners();
+    </script>
+  </body>
+</html>
