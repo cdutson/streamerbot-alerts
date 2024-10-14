@@ -427,6 +427,21 @@ function attachListeners() {
   }
 }
 
+function setCSSVars() {
+  let root = document.documentElement;
+
+  root.addEventListener("mousemove", (e) => {
+    root.style.setProperty("--primary-text-color", primaryTextColor);
+    root.style.setProperty("--default-title-color", titleColor);
+    root.style.setProperty("--text-shadow", textShadow);
+    root.style.setProperty("--font-stack", fontStack);
+    root.style.setProperty("--animate-in-speed", animateInSpeed);
+    root.style.setProperty("--animate-out-speed", animateOutSpeed);
+    root.style.setProperty("--img-animate-in-speed", imgAnimateInSpeed);
+    root.style.setProperty("--img-animate-out-speed", imgAnimateOutSpeed);
+  });
+}
+
 // Entry point for whole application. attaches the websocket listeners as
 // well as the animation listeners
 

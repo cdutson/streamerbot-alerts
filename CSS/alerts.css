@@ -1,8 +1,8 @@
 :root {
   --primary-text-color: #ffffff;
-  --defaultTitleColor: #00eeae; /* 00eeae */
+  --default-title-color: #00eeae; /* 00eeae */
   --text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.85), 0px 0px 4px rgba(0, 0, 0, 0.7);
-  --font: "Montserrat-optimized", Monserrat, Verdana, sans-serif;
+  --font-stack: "Montserrat-optimized", Monserrat, Verdana, sans-serif;
   --animate-in-speed: 2s;
   --animate-out-speed: 2s;
   --img-animate-in-speed: 2.5s;
@@ -10,7 +10,7 @@
 }
 
 body {
-  font-family: var(--font);
+  font-family: var(--font-stack);
   color: var(--primary-text-color);
 }
 
@@ -112,7 +112,7 @@ body {
   margin: 0 0 8px 0;
   text-shadow: var(--text-shadow);
   font-size: 36px;
-  color: var(--defaultTitleColor);
+  color: var(--default-title-color);
 }
 #message {
   margin: 0;

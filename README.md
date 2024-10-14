@@ -50,6 +50,30 @@ const defaultTTSSettings = {
 };
 ```
 
+There are also a number of variables you can use to set some of the CSS variables through the config js if you don't want to mess around with the CSS file:
+
+```javascript
+// CSS variable settings
+const useCSSVariables = false;
+// color of message
+const primaryTextColor = "#ffffff";
+// color of alert title
+const titleColor = "#00eeae";
+// text shadow applied to both message and title
+const textShadow =
+  "0px 0px 2px rgba(0, 0, 0, 0.85), 0px 0px 4px rgba(0, 0, 0, 0.7)";
+// the fonts you want to use. These fonts need to be installed on your system if you want them to work.
+const fontStack = "'Montserrat-optimized', Monserrat, Verdana, sans-serif";
+// how fast the alert should animate in
+const animateInSpeed = "2s";
+// how fast the alert should animate out
+const animateOutSpeed = "2s";
+// how fast the image of the alert should animate in
+const imgAnimateInSpeed = "2.5s";
+// how fast the image of the alert should animate out
+const imgAnimateOutSpeed = "2.5s";
+```
+
 ## Alerts Setup
 
 Inside of the config.js file is a variable called `eventResponseStructure`. each key of that is related to an event emitted by streamerbot. When an alert is triggered, the code will select a random title, message, image, and sound for the alert from the configuration therein.
@@ -180,6 +204,10 @@ const eventResponseStructure = {
   },
 };
 ```
+
+## CSS information
+
+If you want to get your hands dirty with the CSS, go nuts! I pulled the bounce animation from [Nelle de Jones](https://codepen.io/nelledejones/pen/gOOPWrK)'s codepen post, and in there you can find many other examples if the bounce doesn't do it for you. If you just want to change the variables you can do that using the [Global config](#global-config).
 
 ## Future plans/ideas:
 
