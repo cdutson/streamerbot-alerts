@@ -138,6 +138,7 @@ function checkTwitchExclusions(eventInfo, eventData, structure) {
     if (structure?.exclusions?.indexOf(numberToCheck) > -1) {
       return true;
     }
+
     // check the ranges
     return (
       structure?.exclusions
@@ -145,6 +146,7 @@ function checkTwitchExclusions(eventInfo, eventData, structure) {
         .filter((range) => isNumberInRangeString(range, numberToCheck)).length >
       0
     );
+    // mutiples not yet supported. Honestly these checks can be extracted and re-used between both
   }
   return false;
 }
@@ -191,21 +193,23 @@ function fetchTwitchVariant(eventInfo, eventData, structure) {
         variantToMerge = matchedRanges[0];
       }
 
-      // if it matches on a multiple
-      let matchedMultiplierIndex = undefined;
-      nonNumberVariants
-        .filter((option) => option.startsWith("x"))
-        .forEach((option) => {
-          matchedMultiplierIndex = isMultipleOfNumber(
-            option.slice(1),
-            numberToCheck
-          )
-            ? option
-            : matchedMultiplierIndex;
-        });
+      if (!variantToMerge) {
+        // if it matches on a multiple
+        let matchedMultiplierIndex = undefined;
+        nonNumberVariants
+          .filter((option) => option.startsWith("x"))
+          .forEach((option) => {
+            if (
+              !matchedMultiplierIndex &&
+              isMultipleOfNumber(option.slice(1), numberToCheck)
+            ) {
+              matchedMultiplierIndex = option;
+            }
+          });
 
-      if (matchedMultiplierIndex) {
-        variantToMerge = structure?.variants[matchedMultiplierIndex];
+        if (matchedMultiplierIndex) {
+          variantToMerge = structure?.variants[matchedMultiplierIndex];
+        }
       }
     }
   }

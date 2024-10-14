@@ -25,7 +25,7 @@ additionally
 // By default all alerts will display for 5 seconds before fading out
 const defaultEventDisplayTime = 5000;
 
-const enableTTS = true; // if false no TTS regardless of settings
+const enableTTS = false; // if false no TTS regardless of settings
 // look at https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis for more info on TTS props and voices
 const defaultTTSSettings = {
   cheerThreshold: 100,
