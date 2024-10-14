@@ -54,6 +54,8 @@ There are also a number of variables you can use to set some of the CSS variable
 
 ```javascript
 // CSS variable settings
+
+// If you want to use these overrides, set this to true
 const useCSSVariables = false;
 // color of message
 const primaryTextColor = "#ffffff";

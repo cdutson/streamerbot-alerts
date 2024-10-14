@@ -37,6 +37,8 @@ const defaultTTSSettings = {
 };
 
 // CSS variable settings
+
+// If you want to use these overrides, set this to true
 const useCSSVariables = false;
 // color of message
 const primaryTextColor = "#ffffff";
