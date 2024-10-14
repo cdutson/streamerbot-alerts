@@ -25,7 +25,9 @@ After some (too much) research, I realized that by using the streamerbot websock
 
 1. Install [Streamer.bot](https://streamer.bot), and connect it to Twitch.
 1. Turn on the Websocket Server:
+![image](https://github.com/user-attachments/assets/525b2405-ff56-4bdb-a45b-3936b95f7b4f)
 1. Add a new browser source in your streaming tool, and set it to point to the Alerts.html file of this project:
+![image-1](https://github.com/user-attachments/assets/6e743129-83cf-4c78-b8ea-211fe60ee461)
 1. [Set up your alert reactions](#alert-setup) in the `scripts/config.js` file.
 
 ## Global config
