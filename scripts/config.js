@@ -36,6 +36,28 @@ const defaultTTSSettings = {
   volume: 1,
 };
 
+// CSS variable settings
+
+// If you want to use these overrides, set this to true
+const useCSSVariables = false;
+// color of message
+const primaryTextColor = "#ffffff";
+// color of alert title
+const titleColor = "#00eeae";
+// text shadow applied to both message and title
+const textShadow =
+  "0px 0px 2px rgba(0, 0, 0, 0.85), 0px 0px 4px rgba(0, 0, 0, 0.7)";
+// the fonts you want to use. These fonts need to be installed on your system if you want them to work.
+const fontStack = "'Montserrat-optimized', Monserrat, Verdana, sans-serif";
+// how fast the alert should animate in
+const animateInSpeed = "2s";
+// how fast the alert should animate out
+const animateOutSpeed = "2s";
+// how fast the image of the alert should animate in
+const imgAnimateInSpeed = "2.5s";
+// how fast the image of the alert should animate out
+const imgAnimateOutSpeed = "2.5s";
+
 /* Every object in eventResponseStructure will be used by the event loop to react to specific events
  * currently supported:
  * - Twitch.Follow
