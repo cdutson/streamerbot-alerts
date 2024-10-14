@@ -223,3 +223,6 @@ If you want to get your hands dirty with the CSS, go nuts! I pulled the bounce a
 - [ ] code clean-up
 - [ ] Config tool (no-code config creation)
 - [ ] Separate project for Chat client using WebSocket
+
+## Support me (if you want)
+<a href='https://ko-fi.com/S6S2KGPMT' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi3.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
