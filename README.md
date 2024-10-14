@@ -1,5 +1,7 @@
 # Streamer.bot Alerts
 
+https://github.com/user-attachments/assets/31fb2475-16be-44f9-be36-e68e87905918
+
 This project is to allow for a streamer using OBS or Streamlabs (or anything that supports adding an HTML source) to have simple, functional alert overlays with minimal configuration. I created this project as I wanted to remove my dependence on streamelements, and having alert overlay reactions for things like Cheers, Raids, etc. was a significant hurtle.
 
 After some (too much) research, I realized that by using the streamerbot websocket client, I could build my own system, and thus this project was born. This is a living project as I run into more functionality (and bugs therein) with a laundry-list of things I wish to support. I am also happy to have PR requests in fixing issues, adding functionality, etc.
