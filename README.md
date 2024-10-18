@@ -1,19 +1,26 @@
 # Streamer.bot Alerts
 
-This project is to allow for a streamer using OBS or Streamlabs (or anything that supports adding an HTML source) to have simple, functional alert overlays with minimal configuration. I created this project as I wanted to remove my dependence on streamelements, and having alert overlay reactions for things like Cheers, Raids, etc. was a significant hurtle.
+This project exists to allow for a streamer using OBS or Streamlabs (or anything that supports adding an HTML source) to have simple, functional alert overlays with minimal configuration. I created this project as I wanted to remove my dependence on streamelements, and having alert overlay reactions for things like Cheers, Raids, etc. was a significant hurtle.
 
 After some (too much) research, I realized that by using the streamerbot websocket client, I could build my own system, and thus this project was born. This is a living project as I run into more functionality (and bugs therein) with a laundry-list of things I wish to support. I am also happy to have PR requests in fixing issues, adding functionality, etc.
 
+> [!NOTE]
+> This project is not for large and elaborate alert reactions! You'll want to get your hands dirty with streamer.bot and OBS (or whatever) to perform more elaborate actions, but this will get you some simple, easy alerts with minimal setup.
+
 ## Current functionality
 
-- Currently supports the following Twitch events:
-  - Follow
-  - Cheer
-  - Raid
-  - Sub
-  - ReSub
-  - GiftSub
-  - GiftBomb
+This project currently supports the following Twitch events:
+
+- Follow
+- Cheer
+- Raid
+- Sub
+- ReSub
+- GiftSub
+- GiftBomb
+
+A Quick look at features:
+
 - custom images per alert type
 - custom sounds per alert type
 - custom text for alert titles and details
@@ -25,7 +32,9 @@ After some (too much) research, I realized that by using the streamerbot websock
 
 1. Install [Streamer.bot](https://streamer.bot), and connect it to Twitch.
 1. Turn on the Websocket Server:
+   ![image](https://github.com/user-attachments/assets/525b2405-ff56-4bdb-a45b-3936b95f7b4f)
 1. Add a new browser source in your streaming tool, and set it to point to the Alerts.html file of this project:
+   ![image-1](https://github.com/user-attachments/assets/6e743129-83cf-4c78-b8ea-211fe60ee461)
 1. [Set up your alert reactions](#alert-setup) in the `scripts/config.js` file.
 
 ## Global config
@@ -214,7 +223,7 @@ If you want to get your hands dirty with the CSS, go nuts! I pulled the bounce a
 ## Future plans/ideas:
 
 - [ ] support other platforms (YouTube is next on the list) (please contribute!)
-- [ ] additional variants support
+- [x] additional variants support
 - [ ] equalize exclusions to variants
 - [ ] code clean-up
 - [ ] Config tool (no-code config creation)
