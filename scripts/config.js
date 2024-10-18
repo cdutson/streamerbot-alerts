@@ -99,10 +99,19 @@ const eventResponseStructure = {
     },
     variants: {
       100: {
-        title: ["special event!"],
-        tts: {
-          delay: 3000,
-        },
+        title: ["exact match"],
+      },
+      "100-105": {
+        title: ["range match"],
+      },
+      x25: {
+        title: ["mutliple match"],
+      },
+      ">1000": {
+        title: ["gt match"],
+      },
+      "<2": {
+        title: ["lt match"],
       },
     },
   },

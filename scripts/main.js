@@ -112,41 +112,70 @@ function isMultipleOfNumber(multiple, number) {
   return number % multiple === 0;
 }
 
+function getValueToCheck(eventInfo, eventData) {
+  switch (eventInfo?.type) {
+    case "Cheer":
+      return eventData?.bits;
+    case "Raid":
+      return eventData?.viewerCount;
+    case "ReSub":
+      return eventData?.cumulativeMonths;
+    case "GiftSub":
+      return eventData?.totalSubsGifted;
+    case "GiftBomb":
+      return eventData?.gifts;
+  }
+}
+
+// tries to find a match with more complex checks given an array of strings and the comparison
+function findMatch(keys, numberToCheck) {
+  // if it matches a range
+  let match;
+  // Check for range match
+  const matchedRanges = keys.filter((range) =>
+    isNumberInRangeString(range, numberToCheck)
+  );
+
+  if (matchedRanges.length) {
+    match = matchedRanges[0];
+  }
+
+  //
+  if (!match) {
+    match = keys
+      .filter((option) => option.startsWith("x"))
+      .find((option) => isMultipleOfNumber(option.slice(1), numberToCheck));
+  }
+
+  if (!match) {
+    match = keys
+      .filter((option) => option.startsWith(">"))
+      .find((option) => Number(numberToCheck) > Number(option.slice(1)));
+  }
+
+  if (!match) {
+    match = keys
+      .filter((option) => option.startsWith("<"))
+      .find((option) => Number(numberToCheck) < Number(option.slice(1)));
+  }
+  return match;
+}
+
 // returns true if should be excluded
 function checkTwitchExclusions(eventInfo, eventData, structure) {
   let numberToCheck;
   if ((structure?.exclusions || []).length) {
-    switch (eventInfo?.type) {
-      case "Cheer":
-        numberToCheck = eventData?.bits;
-        break;
-      case "Raid":
-        numberToCheck = eventData?.viewerCount;
-        break;
-      case "ReSub":
-        numberToCheck = eventData?.cumulativeMonths;
-        break;
-      case "GiftSub":
-        numberToCheck = eventData?.totalSubsGifted;
-        break;
-      case "GiftBomb":
-        numberToCheck = eventData?.gifts;
-        break;
-    }
+    numberToCheck = getValueToCheck(eventInfo, eventData);
 
     // check the numbers
     if (structure?.exclusions?.indexOf(numberToCheck) > -1) {
       return true;
     }
 
-    // check the ranges
-    return (
-      structure?.exclusions
-        ?.filter((v) => isNaN(v))
-        .filter((range) => isNumberInRangeString(range, numberToCheck)).length >
-      0
-    );
-    // mutiples not yet supported. Honestly these checks can be extracted and re-used between both
+    // check for other matches
+    const nonNumberVariants = structure?.exclusions?.filter((v) => isNaN(v));
+
+    return !!findMatch(nonNumberVariants, numberToCheck);
   }
   return false;
 }
@@ -159,58 +188,19 @@ function fetchTwitchVariant(eventInfo, eventData, structure) {
   let returnVal = { ...structure };
 
   if (Object.keys(structure?.variants || [])?.length) {
-    switch (eventInfo?.type) {
-      case "Cheer":
-        numberToCheck = eventData?.bits;
-        break;
-      case "Raid":
-        numberToCheck = eventData?.viewerCount;
-        break;
-      case "ReSub":
-        numberToCheck = eventData?.cumulativeMonths;
-        break;
-      case "GiftSub":
-        numberToCheck = eventData?.totalSubsGifted;
-        break;
-      case "GiftBomb":
-        numberToCheck = eventData?.gifts;
-        break;
-    }
+    numberToCheck = getValueToCheck(eventInfo, eventData);
 
     variantToMerge = structure?.variants[numberToCheck];
 
-    // check for ranges and multipliers
+    // check for other matches
     if (!variantToMerge) {
       const nonNumberVariants = Object.keys(structure?.variants)?.filter((v) =>
         isNaN(v)
       );
 
-      // if it matches a range
-      const matchedRanges = nonNumberVariants.filter((range) =>
-        isNumberInRangeString(range, numberToCheck)
-      );
-      if (matchedRanges.length) {
-        variantToMerge = matchedRanges[0];
-      }
-
-      if (!variantToMerge) {
-        // if it matches on a multiple
-        let matchedMultiplierIndex = undefined;
-        nonNumberVariants
-          .filter((option) => option.startsWith("x"))
-          .forEach((option) => {
-            if (
-              !matchedMultiplierIndex &&
-              isMultipleOfNumber(option.slice(1), numberToCheck)
-            ) {
-              matchedMultiplierIndex = option;
-            }
-          });
-
-        if (matchedMultiplierIndex) {
-          variantToMerge = structure?.variants[matchedMultiplierIndex];
-        }
-      }
+      variantToMerge =
+        structure?.variants[findMatch(nonNumberVariants, numberToCheck)] ||
+        undefined;
     }
   }
 
@@ -253,6 +243,7 @@ function handleTwitchEvent(data) {
     if (structure) {
       // don't fire events when they are excluded
       if (checkTwitchExclusions(eventInfo, eventData, structure)) {
+        console.log("exclusion hit");
         return;
       }
 
@@ -326,6 +317,8 @@ function handleTwitchEvent(data) {
           textToSpeech(messageText, structure.tts);
         }
       }
+
+      triggerAnimation(structure.duration);
     }
   }
 }
@@ -345,20 +338,21 @@ function startQueueProcessing() {
 function handleQueueItem() {
   if (!showingEvent && eventQueue.length) {
     const newEvent = eventQueue.shift();
-    const eventStamp = getEventStamp(newEvent);
-    const structure = eventResponseStructure[eventStamp];
 
     updateAlertContainer(newEvent);
-    startShowAnimation();
-
-    setTimeout(function () {
-      startEndAnimation();
-    }, structure.duration ?? defaultEventDisplayTime);
   }
+}
+
+function triggerAnimation(duration) {
+  startShowAnimation();
+  setTimeout(function () {
+    startEndAnimation();
+  }, duration ?? defaultEventDisplayTime);
 }
 
 // event to push listener data to the queue and starts the polling
 function addEventToQueue(data) {
+  console.log("data", data);
   eventQueue.push(data);
   startQueueProcessing();
 }
