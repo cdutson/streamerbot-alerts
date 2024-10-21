@@ -25,10 +25,10 @@ additionally
 // By default all alerts will display for 5 seconds before fading out
 const defaultEventDisplayTime = 5000;
 
-const enableTTS = false; // if false no TTS regardless of settings
+const enableTTS = true; // if false no TTS regardless of settings
 // look at https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis for more info on TTS props and voices
 const defaultTTSSettings = {
-  cheerThreshold: 100,
+  cheerThreshold: 100, // only used for Twitch.Cheer events
   delay: 1000,
   pitch: 1,
   rate: 1.3,
@@ -167,5 +167,60 @@ const eventResponseStructure = {
     images: ["images/sub-1.webp"],
     sounds: ["sounds/alert-sub.mp3"],
     duration: 10000,
+  },
+
+  /*
+  // KoFi event structure as filtered through StreamerBot
+  {
+        "messageId": string,
+        "timestamp": Datetime UTC stamp,
+        "from": string,
+        "isPublic": boolean,
+        "message": string,
+        "amount": string (float?),
+        "currency": string,
+        "tier": string, // Resubscription event only, possibly Subscription (need confirmation)
+        "items": string[] // ShopOrder event only
+    }
+  */
+  "Kofi.Donation": {
+    title: ["{from} donated {amount} {currency}!"],
+    message: ["Thanks {from} for the donation!"],
+    images: ["images/sub-1.webp"],
+    sounds: ["sounds/alert-sub.mp3"],
+    textToSpeech: true,
+    showUserMessage: true,
+    exclusions: [],
+    variants: [],
+  },
+  "Kofi.Subscription": {
+    title: ["{from} has subscribed!"],
+    message: ["Thanks {from} for subscribing on KoFi!"],
+    images: ["images/sub-1.webp"],
+    sounds: ["sounds/alert-sub.mp3"],
+    textToSpeech: true,
+    showUserMessage: true,
+    exclusions: [],
+    variants: [],
+  },
+  "Kofi.Resubscription": {
+    title: ["{from} has resubscribed!"],
+    message: ["Thanks {from} for the continued support!"],
+    images: ["images/sub-1.webp"],
+    sounds: ["sounds/alert-sub.mp3"],
+    textToSpeech: true,
+    showUserMessage: true,
+    exclusions: [],
+    variants: [],
+  },
+  "Kofi.ShopOrder": {
+    title: ["{from} bought some stuff!"],
+    message: ["Thanks {from} for the purchase!"],
+    images: ["images/sub-1.webp"],
+    sounds: ["sounds/alert-sub.mp3"],
+    textToSpeech: true,
+    showUserMessage: true,
+    exclusions: [],
+    variants: [],
   },
 };

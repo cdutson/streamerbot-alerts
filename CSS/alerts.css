@@ -84,7 +84,7 @@ body {
   }
 }
 
-#alertContainer {
+.alert {
   display: flex;
   flex-direction: row;
   max-width: 1000px;
