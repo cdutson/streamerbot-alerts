@@ -37,6 +37,9 @@ A Quick look at features:
    ![image-1](https://github.com/user-attachments/assets/6e743129-83cf-4c78-b8ea-211fe60ee461)
 1. [Set up your alert reactions](#alert-setup) in the `scripts/config.js` file.
 
+> [!NOTE]
+> To enable KoFi integration, please refer to the connection instructions found in the [Streamer.Bot KoFi integration page](https://docs.streamer.bot/guide/integrations/ko-fi).
+
 ## Global config
 
 There are some global settings used for the defaults for alerts:
@@ -50,7 +53,7 @@ const enableTTS = false;
 
 // look at https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis for more info on TTS props and voices
 const defaultTTSSettings = {
-  cheerThreshold: 100,
+  cheerThreshold: 100, // only applies to Twitch.Cheer events currently
   delay: 1000,
   pitch: 1,
   rate: 1.3,
@@ -224,7 +227,7 @@ If you want to get your hands dirty with the CSS, go nuts! I pulled the bounce a
 
 - [ ] support other platforms (YouTube is next on the list) (please contribute!)
 - [x] additional variants support
-- [ ] equalize exclusions to variants
+- [x] equalize exclusions to variants
 - [ ] code clean-up
 - [ ] Config tool (no-code config creation)
 - [ ] Separate project for Chat client using WebSocket
