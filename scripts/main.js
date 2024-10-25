@@ -13,11 +13,6 @@
  * https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis << Everything you want to know about the Speech Synthesis API
  */
 
-// NEW TODO LIST
-
-// Update documentation (kofi event structure)
-// dry out event handling start
-
 // NO TOUCHY BELOW
 const synth = window.speechSynthesis;
 
