@@ -28,7 +28,7 @@ const defaultEventDisplayTime = 5000;
 const enableTTS = true; // if false no TTS regardless of settings
 // look at https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis for more info on TTS props and voices
 const defaultTTSSettings = {
-  cheerThreshold: 100, // only used for Twitch.Cheer events
+  amountThreshold: 100, // only used for Twitch.Cheer events
   delay: 1000,
   pitch: 1,
   rate: 1.3,
@@ -57,21 +57,6 @@ const animateOutSpeed = "2s";
 const imgAnimateInSpeed = "2.5s";
 // how fast the image of the alert should animate out
 const imgAnimateOutSpeed = "2.5s";
-
-/* Every object in eventResponseStructure will be used by the event loop to react to specific events
- * currently supported:
- * - Twitch.Follow
- * - Twitch.Cheer
- * - Twitch.Raid
- * - Twitch.Sub
- * - Twitch.ReSub
- * - Twitch.GiftSub
- * - Twitch.GiftBomb
- *
- * If you want to add more, you can! technically any event should be "supported" but in reality
- * some events are very special snowflake events, and you'll have to edit updateAlertContainer
- * (if you want to support other platforms) and handleTwitchEvent for any specific event weirdness
- */
 
 const eventResponseStructure = {
   // https://docs.streamer.bot/api/servers/websocket/events/twitch#follow
@@ -185,7 +170,9 @@ const eventResponseStructure = {
   */
   "Kofi.Donation": {
     title: ["{from} donated {amount} {currency}!"],
+    anonTitle: ["Someone donated {amount} {currency}!"],
     message: ["Thanks {from} for the donation!"],
+    anonMessage: ["Thanks for the donation, mysterious stranger!"],
     images: ["images/sub-1.webp"],
     sounds: ["sounds/alert-sub.mp3"],
     textToSpeech: true,

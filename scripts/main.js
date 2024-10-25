@@ -14,8 +14,9 @@
  */
 
 // NEW TODO LIST
-// HTML Templates instead of straight insertion (animation class can just live on it, yay). get template, clone, inject into page. on animation out complete: remove node
-// KoFi integration
+
+// Update documentation (kofi event structure)
+// dry out event handling start
 
 // NO TOUCHY BELOW
 const synth = window.speechSynthesis;
@@ -139,7 +140,6 @@ function getValueToCheck(eventInfo, eventData) {
 
 // tries to find a match with more complex checks given an array of strings and the comparison
 function findMatch(keys, numberToCheck) {
-  // if it matches a range
   let match;
 
   // Check for range match
@@ -151,19 +151,21 @@ function findMatch(keys, numberToCheck) {
     match = matchedRanges[0];
   }
 
-  //
+  // multiples
   if (!match) {
     match = keys
       .filter((option) => option.startsWith("x"))
       .find((option) => isMultipleOfNumber(option.slice(1), numberToCheck));
   }
 
+  // greater than
   if (!match) {
     match = keys
       .filter((option) => option.startsWith(">"))
       .find((option) => Number(numberToCheck) > Number(option.slice(1)));
   }
 
+  // less than
   if (!match) {
     match = keys
       .filter((option) => option.startsWith("<"))
@@ -367,7 +369,8 @@ function handleTwitchEvent(data) {
         if (
           eventInfo?.type !== "Cheer" ||
           eventData?.bits >=
-            (structure.tts?.cheerThreshold || defaultTTSSettings.cheerThreshold)
+            (structure.tts?.amountThreshold ||
+              defaultTTSSettings.amountThreshold)
         ) {
           textToSpeech(templateData.message, structure.tts);
         }
@@ -426,92 +429,20 @@ function handleKoFiEvent(data) {
         structure.showUserMessage &&
         templateData.message
       ) {
-        textToSpeech(templateData.message, structure.tts);
+        if (
+          ["ShopOrder", "Donation"].indexOf(eventInfo?.type) < 0 ||
+          Number(eventData?.amount) >=
+            (structure.tts?.amountThreshold ||
+              defaultTTSSettings.amountThreshold)
+        ) {
+          textToSpeech(templateData.message, structure.tts);
+        }
       }
 
       returnVal = [compileAlertMarkup(eventInfo, templateData), structure];
     }
   }
   return returnVal;
-  /*
-   DONATION
-  {
-    "timeStamp": "2024-10-19T12:10:13.8794571-04:00",
-    "event": {
-        "source": "Kofi",
-        "type": "Donation"
-    },
-    "data": {
-        "messageId": "e2ba6d4e-91c7-462c-a9d1-9fc129e860f5",
-        "timestamp": "2024-10-19T16:10:12Z",
-        "from": "Jo Example",
-        "isPublic": true,
-        "message": "Good luck with the integration!",
-        "amount": "3.00",
-        "currency": "USD"
-    }
-}
-  */
-  /*
-SUBSCRIPTION
-
-{
-    "timeStamp": "2024-10-19T12:10:40.0991786-04:00",
-    "event": {
-        "source": "Kofi",
-        "type": "Subscription"
-    },
-    "data": {
-        "messageId": "f20a893b-dffa-4d37-b610-d40cf0af4125",
-        "timestamp": "2024-10-19T16:10:39Z",
-        "from": "Jo Example",
-        "isPublic": true,
-        "message": "Good luck with the integration!",
-        "amount": "3.00",
-        "currency": "USD"
-    }
-}
-    */
-  /*
-RESUBSCRIPTION
-{
-    "timeStamp": "2024-10-19T12:10:41.338768-04:00",
-    "event": {
-        "source": "Kofi",
-        "type": "Resubscription"
-    },
-    "data": {
-        "messageId": "414e2a44-15be-45e0-83ac-91fa710f3cfe",
-        "timestamp": "2024-10-19T16:10:40Z",
-        "from": "Jo Example",
-        "isPublic": true,
-        "amount": "5.00",
-        "currency": "USD",
-        "tier": "Bronze"
-    }
-}
-    */
-  /*
-ShopOrder
-{
-    "timeStamp": "2024-10-19T12:10:44.0933923-04:00",
-    "event": {
-        "source": "Kofi",
-        "type": "ShopOrder"
-    },
-    "data": {
-        "messageId": "c00db4d4-5efb-4ecd-9eb7-c46c0684376c",
-        "timestamp": "2024-10-19T16:10:43Z",
-        "from": "Jo Example",
-        "isPublic": true,
-        "amount": "27.95",
-        "currency": "USD",
-        "items": [
-            "1a2b3c4d5e",
-            "a1b2c3d4e5"
-        ]
-    }
-}*/
 }
 // Queue-related stuff
 //////////////////////
@@ -541,7 +472,6 @@ function triggerAnimation(duration) {
 
 // event to push listener data to the queue and starts the polling
 function addEventToQueue(data) {
-  console.log("data", data);
   eventQueue.push(data);
   startQueueProcessing();
 }
