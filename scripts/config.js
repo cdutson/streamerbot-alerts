@@ -28,7 +28,7 @@ const defaultEventDisplayTime = 5000;
 const enableTTS = false; // if false no TTS regardless of settings
 // look at https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis for more info on TTS props and voices
 const defaultTTSSettings = {
-  cheerThreshold: 100,
+  amountThreshold: 100, // only applies to Twitch.Cheer, KoFi.Donation, and KoFi.ShopOrder events currently
   delay: 1000,
   pitch: 1,
   rate: 1.3,
@@ -57,21 +57,6 @@ const animateOutSpeed = "2s";
 const imgAnimateInSpeed = "2.5s";
 // how fast the image of the alert should animate out
 const imgAnimateOutSpeed = "2.5s";
-
-/* Every object in eventResponseStructure will be used by the event loop to react to specific events
- * currently supported:
- * - Twitch.Follow
- * - Twitch.Cheer
- * - Twitch.Raid
- * - Twitch.Sub
- * - Twitch.ReSub
- * - Twitch.GiftSub
- * - Twitch.GiftBomb
- *
- * If you want to add more, you can! technically any event should be "supported" but in reality
- * some events are very special snowflake events, and you'll have to edit updateAlertContainer
- * (if you want to support other platforms) and handleTwitchEvent for any specific event weirdness
- */
 
 const eventResponseStructure = {
   // https://docs.streamer.bot/api/servers/websocket/events/twitch#follow
@@ -167,5 +152,62 @@ const eventResponseStructure = {
     images: ["images/sub-1.webp"],
     sounds: ["sounds/alert-sub.mp3"],
     duration: 10000,
+  },
+
+  /*
+  // KoFi event structure as filtered through StreamerBot
+  {
+        "messageId": string,
+        "timestamp": Datetime UTC stamp,
+        "from": string,
+        "isPublic": boolean,
+        "message": string,
+        "amount": string (float?),
+        "currency": string,
+        "tier": string, // Resubscription event only, possibly Subscription (need confirmation)
+        "items": string[] // ShopOrder event only
+    }
+  */
+  "Kofi.Donation": {
+    title: ["{from} donated {amount} {currency}!"],
+    anonTitle: ["Someone donated {amount} {currency}!"],
+    message: ["Thanks {from} for the donation!"],
+    anonMessage: ["Thanks for the donation, mysterious stranger!"],
+    images: ["images/sub-1.webp"],
+    sounds: ["sounds/alert-sub.mp3"],
+    textToSpeech: true,
+    showUserMessage: true,
+    exclusions: [],
+    variants: [],
+  },
+  "Kofi.Subscription": {
+    title: ["{from} has subscribed!"],
+    message: ["Thanks {from} for subscribing on KoFi!"],
+    images: ["images/sub-1.webp"],
+    sounds: ["sounds/alert-sub.mp3"],
+    textToSpeech: true,
+    showUserMessage: true,
+    exclusions: [],
+    variants: [],
+  },
+  "Kofi.Resubscription": {
+    title: ["{from} has resubscribed!"],
+    message: ["Thanks {from} for the continued support!"],
+    images: ["images/sub-1.webp"],
+    sounds: ["sounds/alert-sub.mp3"],
+    textToSpeech: true,
+    showUserMessage: true,
+    exclusions: [],
+    variants: [],
+  },
+  "Kofi.ShopOrder": {
+    title: ["{from} bought some stuff!"],
+    message: ["Thanks {from} for the purchase!"],
+    images: ["images/sub-1.webp"],
+    sounds: ["sounds/alert-sub.mp3"],
+    textToSpeech: true,
+    showUserMessage: true,
+    exclusions: [],
+    variants: [],
   },
 };

@@ -11,16 +11,34 @@
     <title>Streamer.bot websocket alerts</title>
   </head>
   <body>
-    <div id="alertContainer">
-      <div id="alertImageWrapper">
-        <img src="" id="alertImage" />
+    <div id="alertContainer"></div>
+
+    <audio id="sound"></audio>
+
+    <template id="twitchAlertTemplate">
+      <div class="alert twitch-alert bounce-in">
+        <div id="alertImageWrapper">
+          <img src="" id="alertImage" class="bounce-in-img" />
+        </div>
+        <div id="details">
+          <h1 id="title"></h1>
+          <h2 id="message"></h2>
+        </div>
       </div>
-      <div id="details">
-        <h1 id="title"></h1>
-        <h2 id="message"></h2>
+    </template>
+
+    <template id="kofiAlertTemplate">
+      <div class="alert kofi-alert bounce-in">
+        <div id="alertImageWrapper">
+          <img src="" id="alertImage" class="bounce-in-img" />
+        </div>
+        <div id="details">
+          <h1 id="title"></h1>
+          <h2 id="message"></h2>
+        </div>
       </div>
-      <audio id="sound"></audio>
-    </div>
+    </template>
+
     <script>
       if (useCSSVariables) {
         setCSSVars();
