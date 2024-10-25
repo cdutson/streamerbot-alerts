@@ -25,10 +25,10 @@ additionally
 // By default all alerts will display for 5 seconds before fading out
 const defaultEventDisplayTime = 5000;
 
-const enableTTS = true; // if false no TTS regardless of settings
+const enableTTS = false; // if false no TTS regardless of settings
 // look at https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis for more info on TTS props and voices
 const defaultTTSSettings = {
-  amountThreshold: 100, // only used for Twitch.Cheer events
+  amountThreshold: 100, // only applies to Twitch.Cheer, KoFi.Donation, and KoFi.ShopOrder events currently
   delay: 1000,
   pitch: 1,
   rate: 1.3,
