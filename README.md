@@ -36,6 +36,8 @@ A Quick look at features:
 - option to inject users' message instead of detail message
 - supports browser Text-to-speech (with overrides for each event type)
 - supports overrides for certain events for specific interactions
+- ability to suppress GiftSub events if a GiftBomb event happens
+- debug mode, which will provide a firehose of console logs of events from streamerbot
 
 ## Getting started
 
@@ -59,6 +61,13 @@ const defaultEventDisplayTime = 5000;
 
 // if false no Text-To-Speech will fire, regardless of settings
 const enableTTS = false;
+
+// if DEBUG_MODE is set to true, events will be emitted into the console. This is useful if
+// you're customizing your events, and want to see what data is sent with any given event.
+const DEBUG_MODE = false;
+
+// if enabled, only the GiftBomb event will be triggered, and the individual GiftSub events will be suppressed
+const supressGiftBombSubEvents = true;
 
 // look at https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis for more info on TTS props and voices
 const defaultTTSSettings = {
@@ -102,24 +111,23 @@ const imgAnimateOutSpeed = "2.5s";
 Inside of the config.js file is a variable called `eventResponseStructure`. each key of that is related to an event emitted by streamerbot. When an alert is triggered, the code will select a random title, message, image, and sound for the alert from the configuration therein.
 
 > [!NOTE]
-> For all titles and messages (as well as the anonymous options) the event details are injected in as keys that can be used as token replacement. For example: `{displayName}` will be replaced with the `displayName` value from the triggered event. This will work for any value, but it's primative replacement so expect JS shenanigans.
+> For all titles and messages (as well as the anonymous options) the event details are injected in as keys that can be used as token replacement. For example: `{user_name}` will be replaced with the `user_name` value from the triggered event. You can also dig for props in the data structure. For example `{user.name}` will look in data, find the `user` object, and then attempt to get the `name` prop therein. If it fails, an empty string is returned.
 
 #### Example:
 
 ```javascript
 const eventResponseStructure = {
   "Twitch.Follow": {
-    // Event name
     title: ["New Follower"],
-    message: ["Welcome {displayName}!", "Howdy {displayName}!"],
+    message: ["Welcome {user_name}!", "Howdy {user_name}!"],
     images: ["images/welcome-1.webp"],
     sounds: ["sounds/alert-follow.mp3"],
     duration: 8000,
   },
   "Twitch.Cheer": {
-    title: ["{displayName} gave bits!"],
+    title: ["{user.name} gave bits!"],
     anonTitle: ["Bits!"],
-    message: ["Thanks for the {bits} bits, {displayName}"],
+    message: ["Thanks for the {bits} bits, {user.name}"],
     anonMessage: ["Thanks for the {bits} bits, anonymous patron!"],
     images: ["images/cheer-1.webp"],
     sounds: ["sounds/alert-cheer.mp3"],
@@ -134,7 +142,7 @@ You can refer to the sample config file that comes with this project for more ex
 > For a full list of possible events, please refer to the [streamer.bot documentation](https://streamerbot.github.io/client/api/events) that lists all possible emitted events.
 
 > [!NOTE]
-> For details for all of the Twitch events sent from streamer.bot, please refer to the events list from the [streamer.bot documentation](https://docs.streamer.bot/api/servers/websocket/events/twitch).
+> For details for all of the Twitch events sent from streamer.bot, please refer to the events list from the [streamer.bot documentation](https://docs.streamer.bot/api/servers/websocket/events/twitch), or enabled DEBUG_MODE to see a firehose of events that comes from streamerbot.
 
 #### Note on KoFi events
 
@@ -284,9 +292,9 @@ All events have a special class assigned to the event. For example a twitch chee
 - [ ] support other platforms (YouTube is next on the list) (please contribute!)
 - [x] additional variants support
 - [x] equalize exclusions to variants
-- [ ] code clean-up
 - [ ] Config tool (no-code config creation)
 - [ ] Separate project for Chat client using WebSocket
 
 ## Support me (if you want)
+
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S2KGPMT)
