@@ -496,7 +496,10 @@ function triggerAnimation(duration) {
 
 // event to push listener data to the queue and starts the polling
 function addEventToQueue(data) {
-  console.log("data", data);
+  if (DEBUG_MODE) {
+    console.log("event added to queue:", data);
+  }
+
   eventQueue.push(data);
   startQueueProcessing();
 }
@@ -582,7 +585,10 @@ function setCSSVars() {
 const client = new StreamerbotClient({
   subscribe: "*",
   onData: (data) => {
-    console.log("EVENT", data);
+    if (DEBUG_MODE) {
+      console.log("streamerbot event:", data);
+    }
+
     const eventName = getEventStamp(data?.event);
     if (Object.keys(eventResponseStructure).indexOf(eventName) > -1) {
       addEventToQueue(data);
