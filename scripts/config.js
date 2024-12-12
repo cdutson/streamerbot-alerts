@@ -24,8 +24,13 @@ additionally
 
 // By default all alerts will display for 5 seconds before fading out
 const defaultEventDisplayTime = 5000;
-
 const enableTTS = false; // if false no TTS regardless of settings
+const supressGiftBombSubEvents = true;
+
+// if DEBUG_MODE is set to true, events will be emitted into the console. This is useful if
+// you're customizing your events, and want to see what data is sent with any given event.
+const DEBUG_MODE = false;
+
 // look at https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis for more info on TTS props and voices
 const defaultTTSSettings = {
   amountThreshold: 100, // only applies to Twitch.Cheer, KoFi.Donation, and KoFi.ShopOrder events currently
@@ -62,16 +67,16 @@ const eventResponseStructure = {
   // https://docs.streamer.bot/api/servers/websocket/events/twitch#follow
   "Twitch.Follow": {
     title: ["New Follower"],
-    message: ["Welcome {displayName}!", "Howdy {displayName}!"],
+    message: ["Welcome {user_name}!", "Howdy {user_name}!"],
     images: ["images/welcome-1.webp"],
     sounds: ["sounds/alert-follow.mp3"],
     duration: 8000,
   },
   // https://docs.streamer.bot/api/servers/websocket/events/twitch#cheer
   "Twitch.Cheer": {
-    title: ["{displayName} gave bits!"],
+    title: ["{user.name} gave bits!"],
     anonTitle: ["Bits!"],
-    message: ["Thanks for the {bits} bits, {displayName}"],
+    message: ["Thanks for the {bits} bits, {user.name}"],
     anonMessage: ["Thanks for the {bits} bits, anonymous patron!"],
     images: ["images/cheer-1.webp"],
     sounds: ["sounds/alert-cheer.mp3"],
@@ -102,7 +107,7 @@ const eventResponseStructure = {
   },
   // https://docs.streamer.bot/api/servers/websocket/events/twitch#raid
   "Twitch.Raid": {
-    title: ["{displayName} is here!"],
+    title: ["{from_broadcaster_user_name} is here!"],
     message: ["Welcome!", "Hello raiders!"],
     images: [],
     sounds: ["sounds/alert-raid.mp3"],
@@ -112,8 +117,8 @@ const eventResponseStructure = {
   // https://docs.streamer.bot/api/servers/websocket/events/twitch#sub
   "Twitch.Sub": {
     title: ["New Subscriber"],
-    message: ["Thanks for the sub, {displayName}!"],
-    primeMessage: ["Thanks for the Twitch Prime sub {displayName}!"],
+    message: ["Thanks for the sub, {user.name}!"],
+    primeMessage: ["Thanks for the Twitch Prime sub {user.name}!"],
     images: ["images/sub-1.webp"],
     sounds: ["sounds/alert-sub.mp3"],
     showUserMessage: true,
@@ -121,10 +126,10 @@ const eventResponseStructure = {
   },
   // https://docs.streamer.bot/api/servers/websocket/events/twitch#resub
   "Twitch.ReSub": {
-    title: ["{displayName} Resubscribed!"],
-    message: ["Thanks for the {cumulativeMonths} months, {displayName}!"],
+    title: ["{user.name} Resubscribed!"],
+    message: ["Thanks for the {cumulativeMonths} months, {user.name}!"],
     primeMessage: [
-      "Thanks for resubbing with your Twitch Prime sub {displayName}!",
+      "Thanks for resubbing with your Twitch Prime sub {user.name}!",
     ],
     images: ["images/sub-1.webp"],
     sounds: ["sounds/alert-sub.mp3"],
@@ -133,9 +138,9 @@ const eventResponseStructure = {
   },
   // https://docs.streamer.bot/api/servers/websocket/events/twitch#gift-sub
   "Twitch.GiftSub": {
-    title: ["{recipientDisplayName} was gifted a sub"],
-    anonTitle: ["{recipientDisplayName} was gifted a sub"],
-    message: ["Thanks for the gift sub, {displayName}"],
+    title: ["{recipient.name} was gifted a sub"],
+    anonTitle: ["{recipient.name} was gifted a sub"],
+    message: ["Thanks for the gift sub, {user.name}"],
     anonMessage: ["Thanks for the gift sub, anonymous patron!"],
     primeMessage: ["There are prime gift subs?!"],
     images: ["images/sub-1.webp"],
@@ -144,9 +149,9 @@ const eventResponseStructure = {
   },
   // https://docs.streamer.bot/api/servers/websocket/events/twitch#gift-bomb
   "Twitch.GiftBomb": {
-    title: ["{displayName} gifted {gifts} subs"],
+    title: ["{user.name} gifted {gifts} subs"],
     anonTitle: ["{gifts} subs have been gifted"],
-    message: ["Thanks {displayName} for the subs!"],
+    message: ["Thanks {user.name} for the subs!"],
     anonMessage: ["Thanks for the {gifts} subs!"],
     primeMessage: ["There are prime gift subs?!"],
     images: ["images/sub-1.webp"],

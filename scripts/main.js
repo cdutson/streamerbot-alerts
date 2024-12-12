@@ -13,6 +13,11 @@
  * https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis << Everything you want to know about the Speech Synthesis API
  */
 
+// NEW TODO LIST
+
+// Update documentation (kofi event structure)
+// dry out event handling start
+
 // NO TOUCHY BELOW
 const synth = window.speechSynthesis;
 
@@ -21,12 +26,27 @@ let showingEvent = false;
 let isTalking = false;
 let intervalId = null;
 let voices = [];
+const giftSubIds = [];
 
 // replace {tokenName} with their value from the dataSet
 // unknown tokens are replaced with an empty string
 function replaceToken(targetString, dataSet) {
-  return targetString.replace(/{(\w*)}/g, function (m, key) {
-    return dataSet.hasOwnProperty(key) ? dataSet[key] : "";
+  return targetString.replace(/{(\S*)}/g, function (m, key) {
+    if (dataSet.hasOwnProperty(key)) {
+      return dataSet[key];
+    } else if (key.split(".").length > 1) {
+      const keyparts = key.split(".");
+      let objRef = dataSet;
+
+      keyparts.forEach((part) => {
+        if (objRef.hasOwnProperty(part)) {
+          objRef = objRef[part];
+        } else {
+          objRef = null;
+        }
+      });
+      return objRef ? objRef : "";
+    }
   });
 }
 
@@ -135,6 +155,7 @@ function getValueToCheck(eventInfo, eventData) {
 
 // tries to find a match with more complex checks given an array of strings and the comparison
 function findMatch(keys, numberToCheck) {
+  // if it matches a range
   let match;
 
   // Check for range match
@@ -146,21 +167,19 @@ function findMatch(keys, numberToCheck) {
     match = matchedRanges[0];
   }
 
-  // multiples
+  //
   if (!match) {
     match = keys
       .filter((option) => option.startsWith("x"))
       .find((option) => isMultipleOfNumber(option.slice(1), numberToCheck));
   }
 
-  // greater than
   if (!match) {
     match = keys
       .filter((option) => option.startsWith(">"))
       .find((option) => Number(numberToCheck) > Number(option.slice(1)));
   }
 
-  // less than
   if (!match) {
     match = keys
       .filter((option) => option.startsWith("<"))
@@ -225,6 +244,13 @@ function checkForEventExclusions(eventInfo, eventData, structure) {
   return false;
 }
 
+// checks if a gift sub is in the exclusion list
+function checkForGiftBombExclusions(eventInfo, eventData) {
+  if (!supressGiftBombSubEvents || eventInfo?.type !== "GiftSub") {
+    return false;
+  }
+  return !!giftSubIds.find((id) => id === eventData.recipientUserId);
+}
 // merge variants into the base structure for specific
 // overrides of events
 function fetchEventVariant(eventInfo, eventData, structure) {
@@ -294,11 +320,6 @@ function handleTwitchEvent(data) {
     message: null,
   };
 
-  // cheers (like messages) actually have a 'message' prop that contains all the data
-  if (eventInfo?.type === "Cheer") {
-    eventData = eventData.message;
-  }
-
   if (eventInfo && eventData) {
     const eventStamp = getEventStamp(eventInfo);
     const structure = fetchEventVariant(
@@ -310,6 +331,13 @@ function handleTwitchEvent(data) {
     if (structure) {
       // don't fire events when they are excluded
       if (checkForEventExclusions(eventInfo, eventData, structure)) {
+        return returnVal;
+      }
+
+      // if the giftsub was part of a giftbomb, and we're supressing them
+      if (checkForGiftBombExclusions(eventInfo, eventData)) {
+        // strip out id from list, exit early
+        giftSubIds = giftSubIds.filter((id) => id !== eventData.userId);
         return returnVal;
       }
 
@@ -336,7 +364,7 @@ function handleTwitchEvent(data) {
       if (
         ["Sub", "ReSub", "GiftSub", "GiftBomb"].indexOf(eventInfo?.type) > -1 &&
         structure.primeMessage.length &&
-        eventData.subTier === 0
+        eventData.is_prime
       ) {
         templateData.message = replaceToken(
           selectRandomItemFromArray(structure.primeMessage),
@@ -344,9 +372,18 @@ function handleTwitchEvent(data) {
         );
       }
 
+      if (supressGiftBombSubEvents && eventInfo?.type === "GiftBomb") {
+        giftSubIds.push(
+          ...(eventInfo?.giftSubs?.map((sub) => sub?.recipientUserId) || [])
+        );
+      }
+
       // override message if user has message and is supported and override is enabled
-      if (structure.showUserMessage && eventData?.message) {
-        templateData.message = eventData.message;
+      if (
+        structure.showUserMessage &&
+        (eventData?.message || eventData?.text)
+      ) {
+        templateData.message = eventData?.message || eventData?.text;
       }
 
       // override the image to the users profileImage if it exists and override is enabled
@@ -364,8 +401,7 @@ function handleTwitchEvent(data) {
         if (
           eventInfo?.type !== "Cheer" ||
           eventData?.bits >=
-            (structure.tts?.amountThreshold ||
-              defaultTTSSettings.amountThreshold)
+            (structure.tts?.cheerThreshold || defaultTTSSettings.cheerThreshold)
         ) {
           textToSpeech(templateData.message, structure.tts);
         }
@@ -424,14 +460,7 @@ function handleKoFiEvent(data) {
         structure.showUserMessage &&
         templateData.message
       ) {
-        if (
-          ["ShopOrder", "Donation"].indexOf(eventInfo?.type) < 0 ||
-          Number(eventData?.amount) >=
-            (structure.tts?.amountThreshold ||
-              defaultTTSSettings.amountThreshold)
-        ) {
-          textToSpeech(templateData.message, structure.tts);
-        }
+        textToSpeech(templateData.message, structure.tts);
       }
 
       returnVal = [compileAlertMarkup(eventInfo, templateData), structure];
@@ -467,6 +496,7 @@ function triggerAnimation(duration) {
 
 // event to push listener data to the queue and starts the polling
 function addEventToQueue(data) {
+  console.log("data", data);
   eventQueue.push(data);
   startQueueProcessing();
 }
