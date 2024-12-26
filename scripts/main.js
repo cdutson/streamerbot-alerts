@@ -374,7 +374,7 @@ function handleTwitchEvent(data) {
 
       if (supressGiftBombSubEvents && eventInfo?.type === "GiftBomb") {
         giftSubIds.push(
-          ...(eventInfo?.giftSubs?.map((sub) => sub?.recipientUserId) || [])
+          ...(eventData?.recipients?.map((sub) => sub?.id) || [])
         );
       }
 
