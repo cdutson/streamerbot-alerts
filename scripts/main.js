@@ -383,7 +383,11 @@ function handleTwitchEvent(data) {
         structure.showUserMessage &&
         (eventData?.message || eventData?.text)
       ) {
-        templateData.message = eventData?.message || eventData?.text;
+        const msg =
+          typeof eventData?.message === "string"
+            ? eventData?.message
+            : eventData?.text;
+        templateData.message = msg ?? templateData.message;
       }
 
       // override the image to the users profileImage if it exists and override is enabled
