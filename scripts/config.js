@@ -22,6 +22,10 @@ additionally
   whatever key/values you put in there over the base event shape
 */
 
+
+const wsHost = "127.0.0.1";
+const wsPort = 8080;
+
 // By default all alerts will display for 5 seconds before fading out
 const defaultEventDisplayTime = 5000;
 const enableTTS = false; // if false no TTS regardless of settings
@@ -29,7 +33,7 @@ const supressGiftBombSubEvents = true;
 
 // if DEBUG_MODE is set to true, events will be emitted into the console. This is useful if
 // you're customizing your events, and want to see what data is sent with any given event.
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 
 // look at https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis for more info on TTS props and voices
 const defaultTTSSettings = {
