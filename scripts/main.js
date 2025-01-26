@@ -587,6 +587,10 @@ function setCSSVars() {
 //https://streamerbot.github.io/client/get-started/setup << if you want custom options
 
 const client = new StreamerbotClient({
+	// host: '10.0.2.25',
+	// port: 8080,
+  host: wsHost,
+  port: wsPort,
   subscribe: "*",
   onData: (data) => {
     if (DEBUG_MODE) {

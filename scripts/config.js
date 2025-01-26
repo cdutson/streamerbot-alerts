@@ -22,6 +22,10 @@ additionally
   whatever key/values you put in there over the base event shape
 */
 
+//config for streambot host and port
+const wsHost = "127.0.0.1";
+const wsPort = 8080;
+
 // By default all alerts will display for 5 seconds before fading out
 const defaultEventDisplayTime = 5000;
 const enableTTS = false; // if false no TTS regardless of settings
@@ -29,7 +33,7 @@ const supressGiftBombSubEvents = true;
 
 // if DEBUG_MODE is set to true, events will be emitted into the console. This is useful if
 // you're customizing your events, and want to see what data is sent with any given event.
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 
 // look at https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis for more info on TTS props and voices
 const defaultTTSSettings = {
@@ -64,6 +68,14 @@ const imgAnimateInSpeed = "2.5s";
 const imgAnimateOutSpeed = "2.5s";
 
 const eventResponseStructure = {
+  // https://docs.streamer.bot/api/servers/websocket/events/twitch#follow
+  "Twitch.ChatMessage": {
+    title: ["New Test"],
+    message: ["Welcome test user"],
+    images: ["images/AlertAnimation.webm"],
+    sounds: ["sounds/alert-follow.mp3"],
+    duration: 8000,
+  },
   // https://docs.streamer.bot/api/servers/websocket/events/twitch#follow
   "Twitch.Follow": {
     title: ["New Follower"],
