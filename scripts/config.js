@@ -22,7 +22,7 @@ additionally
   whatever key/values you put in there over the base event shape
 */
 
-
+//config for streambot host and port
 const wsHost = "127.0.0.1";
 const wsPort = 8080;
 
