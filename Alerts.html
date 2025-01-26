@@ -18,7 +18,10 @@
     <template id="twitchAlertTemplate">
       <div class="alert twitch-alert bounce-in">
         <div id="alertImageWrapper">
-          <img src="" id="alertImage" class="bounce-in-img" />
+          <video autoplay muted playsinline>
+            <source src="" type="video/webm" id="alertImage" class="bounce-in-img">
+          </video>
+
         </div>
         <div id="details">
           <h1 id="title"></h1>
@@ -30,7 +33,9 @@
     <template id="kofiAlertTemplate">
       <div class="alert kofi-alert bounce-in">
         <div id="alertImageWrapper">
-          <img src="" id="alertImage" class="bounce-in-img" />
+          <video autoplay muted playsinline>
+            <source src="" type="video/webm" id="alertImage" class="bounce-in-img">
+          </video>
         </div>
         <div id="details">
           <h1 id="title"></h1>

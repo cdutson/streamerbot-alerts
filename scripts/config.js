@@ -69,6 +69,14 @@ const imgAnimateOutSpeed = "2.5s";
 
 const eventResponseStructure = {
   // https://docs.streamer.bot/api/servers/websocket/events/twitch#follow
+  "Twitch.ChatMessage": {
+    title: ["New Test"],
+    message: ["Welcome test user"],
+    images: ["images/AlertAnimation.webm"],
+    sounds: ["sounds/alert-follow.mp3"],
+    duration: 8000,
+  },
+  // https://docs.streamer.bot/api/servers/websocket/events/twitch#follow
   "Twitch.Follow": {
     title: ["New Follower"],
     message: ["Welcome {user_name}!", "Howdy {user_name}!"],
